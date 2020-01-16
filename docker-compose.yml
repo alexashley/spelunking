@@ -1,0 +1,44 @@
+version: '3.7'
+
+services:
+  splunk:
+    image: splunk/splunk:8.0.1
+    environment:
+      - SPLUNK_START_ARGS=--accept-license
+      - SPLUNK_PASSWORD=Password#123
+    ports:
+    - 8000:8000
+    - 8088:8088
+    - 8089:8089
+    networks:
+      - splunk
+  noise-maker:
+    depends_on:
+      - splunk
+    image: noise-maker
+    build:
+      context: noise-maker
+    ports:
+      - 5555:5555
+    logging:
+      driver: splunk
+      options:
+        # manually generated token from Splunk console
+        splunk-token: d6e0d7b1-0244-4542-af29-cb632897bf6c
+        splunk-url: http://host.docker.internal:8088
+    networks:
+      - splunk
+#  splunk-forwarder:
+#    image: splunk/universalforwarder:8.0.1
+#    environment:
+#      - SPLUNK_START_ARGS=--accept-license
+#      - SPLUNK_PASSWORD=Password#123
+#      - SPLUNK_STANDALONE_URL=splunk
+#    ports:
+#      - 8088:8088
+#      - 8089:8089
+#    networks:
+#      - splunk
+networks:
+  splunk:
+    driver: bridge
