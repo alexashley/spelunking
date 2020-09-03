@@ -7,7 +7,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@hapi/hapi": "19.0.4",
+    "@hapi/hapi": "19.1.1",
     "chance": "1.1.4"
   },
   "scripts": {
